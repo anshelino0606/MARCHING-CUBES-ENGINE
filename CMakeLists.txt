@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(MARCHING_CUBES SCENE/main.cpp
         LIBRARIES/glad/glad.c
-        LIBRARIES/stb/stb.cpp)
+        LIBRARIES/stb/stb.cpp
+        ENGINE/Graphics/Shader/Shader.cpp
+        ENGINE/Graphics/Texture/Texture.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

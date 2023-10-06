@@ -15,3 +15,11 @@ target_link_libraries(MARCHING_CUBES PRIVATE glfw)
 find_package(OpenGL REQUIRED)
 target_link_libraries(MARCHING_CUBES PRIVATE OpenGL::GL)
 
+include_directories(/opt/homebrew/Cellar/glm/0.9.9.8)
+
+set(ASSIMP_ROOT "/opt/homebrew/Cellar/assimp/5.2.5" CACHE PATH "Assimp root directory")
+find_package(assimp REQUIRED HINTS ${ASSIMP_ROOT})
+include_directories(${ASSIMP_INCLUDE_DIRS})
+target_link_libraries(MARCHING_CUBES PRIVATE ${ASSIMP_LIBRARIES})
+
+include_directories(libraries)

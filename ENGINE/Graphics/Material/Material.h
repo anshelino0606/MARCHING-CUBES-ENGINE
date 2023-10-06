@@ -7,6 +7,8 @@
 
 #include <glm/glm.hpp>
 
+// code provided by learnopengl.com & github.com/michaelg29
+
 struct Material {
     // lighting values
     glm::vec3 ambient;

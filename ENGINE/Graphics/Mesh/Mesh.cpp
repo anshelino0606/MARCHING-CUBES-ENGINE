@@ -117,10 +117,10 @@ void Mesh::loadData(std::vector<Vertex> _vertices, std::vector<unsigned int> _in
     VAO["VBO"].setData<Vertex>(size, &this->vertices[0], GL_STATIC_DRAW);
 
     VAO["VBO"].bind();
-    VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 11, 0);
-    VAO["VBO"].setAttPointer<GLfloat>(1, 3, GL_FLOAT, 11, 3);
-    VAO["VBO"].setAttPointer<GLfloat>(2, 3, GL_FLOAT, 11, 6);
-    VAO["VBO"].setAttPointer<GLfloat>(3, 3, GL_FLOAT, 11, 8);
+    VAO["VBO"].setAttribPointer<GLfloat>(0, 3, GL_FLOAT, 11, 0);
+    VAO["VBO"].setAttribPointer<GLfloat>(1, 3, GL_FLOAT, 11, 3);
+    VAO["VBO"].setAttribPointer<GLfloat>(2, 3, GL_FLOAT, 11, 6);
+    VAO["VBO"].setAttribPointer<GLfloat>(3, 3, GL_FLOAT, 11, 8);
 
     VAO["VBO"].clear();
 
@@ -215,9 +215,9 @@ void Mesh::setup() {
     VAO["VBO"].generate();
     VAO["VBO"].bind();
     VAO["VBO"].setData<Vertex>(vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 8, 0);
-    VAO["VBO"].setAttPointer<GLfloat>(1, 3, GL_FLOAT, 8, 3);
-    VAO["VBO"].setAttPointer<GLfloat>(2, 2, GL_FLOAT, 8, 6);
+    VAO["VBO"].setAttribPointer<GLfloat>(0, 3, GL_FLOAT, 8, 0);
+    VAO["VBO"].setAttribPointer<GLfloat>(1, 3, GL_FLOAT, 8, 3);
+    VAO["VBO"].setAttribPointer<GLfloat>(2, 2, GL_FLOAT, 8, 6);
     VAO["VBO"].clear();
     ArrayObject::clear();
 }

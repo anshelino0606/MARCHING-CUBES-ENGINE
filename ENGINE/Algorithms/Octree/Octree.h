@@ -15,10 +15,14 @@
 
 #include "../List/List.h"
 #include "../States/States.h"
-#include "../Bounds/Bounds.h"
+#include "ENGINE/Algorithms/Bounds/Bounds.h"
 #include "../../Models/box.hpp"
 
 #include "../../Graphics/Model/Model.h"
+
+class Model;
+class Bounds;
+class Box;
 
 namespace Octree {
     /*

@@ -21,7 +21,7 @@ DirLight::DirLight(glm::vec3 direction,
 
     shadowFBO.bind();
     shadowFBO.disableColorBuffer();
-    shadowFBO.allocateAndAttachTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+    shadowFBO.activateTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
 
     updateMatrices();
 }
@@ -82,7 +82,7 @@ PointLight::PointLight(glm::vec3 position,
 
     shadowFBO.bind();
     shadowFBO.disableColorBuffer();
-    shadowFBO.allocateAndAttachCubemap(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+    shadowFBO.activateCubemap(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
 
     updateMatrices();
 }
@@ -127,7 +127,7 @@ SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 up,
 
     shadowFBO.bind();
     shadowFBO.disableColorBuffer();
-    shadowFBO.allocateAndAttachTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+    shadowFBO.activateTexture(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_FLOAT);
 
     updateMatrices();
 }

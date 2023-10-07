@@ -17,7 +17,8 @@
 #include "../Material/Material.h"
 #include "../../Algorithms/Bounds/Bounds.h"
 #include "../../Physics/CollisionMesh/CollisionMesh.h"
-
+#include "../Memory/UniformMemory.h"
+#include "../Memory/FrameMemory.h"
 
 #include <iostream>
 

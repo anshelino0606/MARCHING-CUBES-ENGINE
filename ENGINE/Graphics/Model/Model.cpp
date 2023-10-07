@@ -6,6 +6,7 @@
 
 #include "../../Physics/Environment/Environment.h"
 #include "../../../SCENE/Scene.h"
+#include "../../Algorithms/States/States.h"
 
 #include <iostream>
 #include <limits>
@@ -135,15 +136,15 @@ void Model::initInstances() {
         meshes[i].VAO.bind();
 
         modelVBO.bind();
-        modelVBO.setAttPointer<glm::vec4>(4, 4, GL_FLOAT, 4, 0, 1);
-        modelVBO.setAttPointer<glm::vec4>(5, 4, GL_FLOAT, 4, 1, 1);
-        modelVBO.setAttPointer<glm::vec4>(6, 4, GL_FLOAT, 4, 2, 1);
-        modelVBO.setAttPointer<glm::vec4>(7, 4, GL_FLOAT, 4, 3, 1);
+        modelVBO.setAttribPointer<glm::vec4>(4, 4, GL_FLOAT, 4, 0, 1);
+        modelVBO.setAttribPointer<glm::vec4>(5, 4, GL_FLOAT, 4, 1, 1);
+        modelVBO.setAttribPointer<glm::vec4>(6, 4, GL_FLOAT, 4, 2, 1);
+        modelVBO.setAttribPointer<glm::vec4>(7, 4, GL_FLOAT, 4, 3, 1);
 
         normalModelVBO.bind();
-        normalModelVBO.setAttPointer<glm::vec3>(8, 3, GL_FLOAT, 3, 0, 1);
-        normalModelVBO.setAttPointer<glm::vec3>(9, 3, GL_FLOAT, 3, 1, 1);
-        normalModelVBO.setAttPointer<glm::vec3>(10, 3, GL_FLOAT, 3, 2, 1);
+        normalModelVBO.setAttribPointer<glm::vec3>(8, 3, GL_FLOAT, 3, 0, 1);
+        normalModelVBO.setAttribPointer<glm::vec3>(9, 3, GL_FLOAT, 3, 1, 1);
+        normalModelVBO.setAttribPointer<glm::vec3>(10, 3, GL_FLOAT, 3, 2, 1);
 
         ArrayObject::clear();
     }

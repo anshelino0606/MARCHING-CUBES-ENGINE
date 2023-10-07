@@ -10,7 +10,7 @@
 
 #include "../Shader/Shader.h"
 #include "../../Algorithms/Bounds/Bounds.h"
-//#include "../memory/framememory.hpp"
+#include "../../Graphics/Memory/FrameMemory.h"
 
 /*
     directional light (eg sun)
@@ -32,7 +32,7 @@ struct DirLight {
     glm::mat4 lightSpaceMatrix;
 
     // FBO for shadows
-    FramebufferObject shadowFBO;
+    FrameBuffer shadowFBO;
 
     // default constructor
     DirLight();
@@ -77,7 +77,7 @@ struct PointLight {
     glm::mat4 lightSpaceMatrices[6];
 
     // FBO for shadows
-    FramebufferObject shadowFBO;
+    FrameBuffer shadowFBO;
 
     // default constructor
     PointLight();
@@ -134,7 +134,7 @@ struct SpotLight {
 
     glm::mat4 lightSpaceMatrix;
 
-    FramebufferObject shadowFBO;
+    FrameBuffer shadowFBO;
 
     void render(Shader shader, int idx, unsigned int textureIdx);
     void updateMatrices();

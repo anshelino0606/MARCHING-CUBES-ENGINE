@@ -27,9 +27,9 @@ public:
 
     template<class T>
     void setAttribPointer(GLuint index, GLint size, GLenum type, GLuint stride, GLuint offset, GLuint divisor = 0);
-private:
-    GLuint val;
+
     GLuint type;
+    GLuint val;
 };
 
 class ArrayObject {

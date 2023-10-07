@@ -97,7 +97,7 @@ bool Face::collidesWithFace(RigidBody* thisRB, Face& face, RigidBody* faceRB, gl
     return false;
 }
 
-bool Face::collidesWithSphere(RigidBody* thisRB, BoundingRegion& br, glm::vec3& retNorm) {
+bool Face::collidesWithSphere(RigidBody* thisRB, Bounds& br, glm::vec3& retNorm) {
     if (br.type != BoundTypes::SPHERE) {
         return false;
     }
@@ -159,7 +159,7 @@ CollisionMesh::CollisionMesh(unsigned int noPoints, float* coordinates,
         }
     }
 
-    this->br = BoundingRegion(center, sqrt(maxRadiusSquared));
+    this->br = Bounds(center, sqrt(maxRadiusSquared));
     this->br.collisionMesh = this;
 
     // calculate face normals

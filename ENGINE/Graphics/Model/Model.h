@@ -22,16 +22,11 @@
 #include "ENGINE/Physics/RigidBody/RigidBody.h"
 #include "../../Algorithms/Bounds/Bounds.h"
 
-#include "../Memory/VertexMemory.h"
-#include "../Memory/FrameMemory.h"
-
 #define DYNAMIC	(unsigned int)1
 #define CONST_INSTANCES	(unsigned int)2
 #define NO_TEX (unsigned int)4
 
 class Scene;
-class Mesh;
-class Bounds;
 
 class Model {
 public:

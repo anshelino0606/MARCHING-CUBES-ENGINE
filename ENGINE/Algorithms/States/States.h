@@ -7,6 +7,7 @@
 
 
 class States {
+public:
     template<typename T>
     static bool indexActive(T* states, int target);
 

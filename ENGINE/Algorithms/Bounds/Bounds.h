@@ -12,20 +12,15 @@
 #include "../Octree/Octree.h"
 #include "../../Physics/CollisionMesh/CollisionMesh.h"
 
-// forward declaration
 namespace Octree {
     class node;
 }
 class CollisionMesh;
 
 enum class BoundTypes : unsigned char {
-    AABB    = 0x00,	// 0x00 = 0	// Axis-aligned bounding box
-    SPHERE  = 0x01	// 0x01 = 1
+    AABB    = 0x00,
+    SPHERE  = 0x01
 };
-
-/*
-    class to represent bounding region
-*/
 
 class Bounds {
 public:

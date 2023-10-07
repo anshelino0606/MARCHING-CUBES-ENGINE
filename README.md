@@ -4,7 +4,7 @@
 
 This project is a 3D visualization engine using the Marching Cubes algorithm, implemented in C++ and OpenGL. It is designed to generate and visualize terrain meshes, as well as scanned and recognized models of human faces or terrain, using OpenCV datasets.
 
-The Engine of environment is based on <learnopengl.com>
+The Engine of environment is based on learnopengl.com and tutorial of github.com/michaelg29
 
 ## Features
 

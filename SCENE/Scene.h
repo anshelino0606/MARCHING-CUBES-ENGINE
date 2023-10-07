@@ -16,6 +16,9 @@
 
 #include <json/json.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "ENGINE/Graphics/Memory/FrameMemory.h"
 #include "ENGINE/Graphics/Memory/UniformMemory.h"
 #include "ENGINE/Models/box.hpp"
@@ -29,6 +32,7 @@
 #include "ENGINE/Algorithms/AVL/Avl.h"
 #include "ENGINE/Algorithms/Octree/Octree.h"
 #include "ENGINE/Algorithms/Trie/Trie.h"
+#include "ENGINE/Graphics/Text/TextRenderer.h"
 
 namespace Octree {
     class node;
@@ -59,6 +63,10 @@ public:
     void renderPointLightShader(Shader shader, unsigned int idx);
     void renderSpotLightShader(Shader shader, unsigned int idx);
     void renderInstances(std::string modelId, Shader shader, float dt);
+
+    FT_Library ft;
+    AVL* fonts;
+
     void renderText(std::string font, Shader shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color);
 
     void cleanup();
@@ -112,8 +120,6 @@ public:
     Octree::node* octree;
 
     Json::Value variableLog;
-
-    AVL* fonts;
 
     FrameBuffer defaultFBO;
 

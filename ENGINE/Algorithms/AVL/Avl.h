@@ -8,21 +8,26 @@
 #define MAX(a,b) (a > b ? a : b)
 
 class AVL {
+public:
+
+    static void* key;
+    static void* val;
+    static int height;
+
+    static AVL* left;
+    static AVL* right;
     
-    void* key;
-    void* val;
-    int height;
-        
-    AVL* left;
-    AVL* right;
-    
-    int (*keycmp)(void* key, void* other);
+    static int (*keycmp)(void* key, void* other);
 
 public:
     AVL();
-    AVL(int (*keycmp)(void* key, void* other)) : left(nullptr), right(nullptr), keycmp(keycmp) {}
+    AVL(int (*keycmp)(void* key, void* other)){
+        this->key = nullptr;
+        this->val = nullptr;
+        this->keycmp = keycmp;
+    }
 
-    AVL* createRoot(void* key, void* val, int (*keycmp)(void* val1, void* val2)) {
+    static AVL* createRoot(void* key, void* val, int (*keycmp)(void* val1, void* val2)) {
         AVL* result = new AVL();
         if (!result)
             return nullptr;
@@ -34,37 +39,42 @@ public:
         result->right = nullptr;
 
         result->keycmp = keycmp;
+
+        return result;
     }
 
-    AVL* createEmptyRoot() {
+    static AVL* createEmptyRoot() {
         return createRoot(nullptr, nullptr, keycmp);
     }
 
-    AVL* smallestKey(AVL* root) {
+    static AVL* smallestKey(AVL* root) {
         return root->left ? smallestKey(root->left) : root;
     }
 
 
-    int getHeight(AVL* avl) {
-        return avl ? this->height : 0;
+    static int getHeight(AVL* avl) {
+        return avl ? height : 0;
     }
 
-    int balanceFactor(AVL* avl) {
+    static int balanceFactor(AVL* avl) {
         return avl ? getHeight(left) - getHeight(right) : 0;
     }
 
-    AVL* insert(AVL* avl, void* key, void* val) {
+    static AVL* insert(AVL* avl, void* key, void* val) {
         AVL* newAVL = bstInsert(avl, key, val);
         newAVL = rebalance(newAVL);
 
         return newAVL;
     }
 
-    AVL* remove(AVL* root, void* key) {
+    static AVL* remove(AVL* root, void* key) {
+        AVL* newRoot = bstRemove(root, key);
+        newRoot = rebalance(newRoot);
 
+        return newRoot;
     }
 
-    void* get(AVL* root, void* key) {
+    static void* get(AVL* root, void* key) {
         if (!root)
             return nullptr;
 
@@ -77,7 +87,7 @@ public:
             return root->left ? get(root->left, key) : nullptr;
     }
 
-    void inorderTraverse(AVL* root, void (*visit)(AVL* avl)) {
+    static void inorderTraverse(AVL* root, void (*visit)(AVL* avl)) {
         if (root->left)
             inorderTraverse(root->left, visit);
 
@@ -86,7 +96,7 @@ public:
             inorderTraverse(root->right, visit);
     }
 
-    void preorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
+    static void preorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
         visit(root);
 
         if (root->left)
@@ -95,7 +105,7 @@ public:
             preorderTraverse(root->right, visit);
     }
 
-    void postorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
+    static void postorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
         if (root->left)
             postorderTraverse(root->left, visit);
         if (root->right)
@@ -113,16 +123,16 @@ public:
         delete AVL;
     }
 
-    void free(AVL* root) {
+    static void free(AVL* root) {
         postorderTraverse(root, deleteAVL);
     }
 
-    void freeDeep(AVL* root) {
+    static void freeDeep(AVL* root) {
         postorderTraverse(root, deleteAVLDeep);
     }
 
 private:
-    AVL* bstInsert(AVL* avl, void* key, void* val) {
+    static AVL* bstInsert(AVL* avl, void* key, void* val) {
         if (!avl) {
             avl->key = key;
             avl->val = val;
@@ -130,22 +140,22 @@ private:
             return avl;
         }
 
-        if (this->keycmp(key, avl->key) < 0) {
+        if (keycmp(key, avl->key) < 0) {
             if (avl->left)
                 avl->left = insert(avl->left, key, val);
             else
-                avl->left = createRoot(key, val, this->keycmp);
+                avl->left = createRoot(key, val, keycmp);
         } else {
             if (avl->right)
                 avl->right = insert(avl->right, key, val);
             else
-                avl->right = createRoot(key, val, this->keycmp);
+                avl->right = createRoot(key, val, keycmp);
         }
         recalcHeight(avl);
         return avl;
     }
 
-    AVL* bstRemove(AVL* avl, void* key) {
+    static AVL* bstRemove(AVL* avl, void* key) {
         int cmp = avl->keycmp(key, avl->key);
         if (cmp < 0) {
             if (avl->left) {
@@ -183,7 +193,7 @@ private:
         return avl;
     }
 
-    AVL* rebalance(AVL* avl) {
+    static AVL* rebalance(AVL* avl) {
         int bf = balanceFactor(avl);
         if (bf < -1 || bf > 1) {
             /*
@@ -222,7 +232,7 @@ private:
         return avl;
     }
 
-    AVL* rotateRight(AVL* avl) {
+    static AVL* rotateRight(AVL* avl) {
         if (!avl->left)
             return avl;
 
@@ -236,7 +246,7 @@ private:
         return newAvl;
     }
 
-    AVL* rotateLeft(AVL* avl) {
+    static AVL* rotateLeft(AVL* avl) {
         if (!avl->right)
             return avl;
 
@@ -250,7 +260,7 @@ private:
         return newAvl;
     }
 
-    void recalcHeight(AVL* avl) {
+    static void recalcHeight(AVL* avl) {
         if (avl)
             avl->height = 1 + MAX(getHeight(avl->left), getHeight(avl->right));
     }

@@ -19,7 +19,7 @@
 #include <iostream>
 
 #include "../Memory/VertexMemory.h"
-#include "../Shader/shader.h"
+#include "../Shader/Shader.h"
 
 typedef struct {
     unsigned int	textureId;	// texture id storing character

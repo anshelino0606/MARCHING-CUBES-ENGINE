@@ -19,7 +19,7 @@
 #include "../Mesh/Mesh.h"
 #include "../../Models/box.hpp"
 #include "../../Physics/CollisionModel/CollisionModel.h"
-#include "../../Physics/RigidBody/Rigidbody.h"
+#include "ENGINE/Physics/RigidBody/RigidBody.h"
 #include "../../Algorithms/Bounds/Bounds.h"
 
 #define DYNAMIC	(unsigned int)1

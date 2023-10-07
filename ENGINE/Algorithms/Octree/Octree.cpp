@@ -39,7 +39,7 @@ void Octree::calculateBounds(Bounds &out, Octant octant, Bounds parentRegion) {
 }
 
 void Octree::node::addToPending(RigidBody* instance, Model *model) {
-    for (Bounds br : model->Boundss) {
+    for (Bounds br : model->boundingRegions) {
         br.instance = instance;
         br.transform();
         queue.push(br);

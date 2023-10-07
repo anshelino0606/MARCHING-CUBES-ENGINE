@@ -18,7 +18,7 @@ public:
     static void uniquelyActivateIndex(T* states, int target);
 
     template<typename T>
-    void deactivateIndex(T* states, int target);
+    static void deactivateIndex(T* states, int target);
 
     template<typename T>
     static void toggleIndex(T* states, int target);

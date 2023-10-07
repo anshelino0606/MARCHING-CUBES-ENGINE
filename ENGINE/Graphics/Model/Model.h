@@ -14,7 +14,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-
 #include <vector>
 
 #include "../Mesh/Mesh.h"
@@ -22,6 +21,10 @@
 #include "../../Physics/CollisionModel/CollisionModel.h"
 #include "../../Physics/RigidBody/Rigidbody.h"
 #include "../../Algorithms/Bounds/Bounds.h"
+
+#define DYNAMIC	(unsigned int)1
+#define CONST_INSTANCES	(unsigned int)2
+#define NO_TEX (unsigned int)4
 
 class Scene;
 

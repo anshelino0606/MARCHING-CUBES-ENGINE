@@ -7,7 +7,16 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         LIBRARIES/glad/glad.c
         LIBRARIES/stb/stb.cpp
         ENGINE/Graphics/Shader/Shader.cpp
-        ENGINE/Graphics/Texture/Texture.cpp)
+        ENGINE/Graphics/Texture/Texture.cpp
+        ENGINE/Graphics/Cubemap/Cubemap.cpp
+        ENGINE/Graphics/Material/Material.cpp
+        ENGINE/Algorithms/States/States.cpp
+        ENGINE/Graphics/Mesh/Mesh.cpp
+        ENGINE/Graphics/Light/Light.cpp
+        ENGINE/Algorithms/Octree/Octree.cpp
+        ENGINE/Algorithms/Bounds/Bounds.cpp
+        ENGINE/Graphics/Model/Model.cpp
+        ENGINE/Physics/RigidBody/RigidBody.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

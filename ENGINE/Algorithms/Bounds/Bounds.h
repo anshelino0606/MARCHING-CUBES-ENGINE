@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 
 #include "../../Physics/RigidBody/RigidBody.h"
+#include "../Octree/Octree.h"
+#include "../../Physics/CollisionMesh/CollisionMesh.h"
 
 // forward declaration
 namespace Octree {

@@ -7,14 +7,12 @@
 
 
 #include <glm/glm.hpp>
-
 #include "../../Physics/RigidBody/RigidBody.h"
-#include "../Octree/Octree.h"
-#include "../../Physics/CollisionMesh/CollisionMesh.h"
 
 namespace Octree {
     class node;
 }
+
 class CollisionMesh;
 
 enum class BoundTypes : unsigned char {
@@ -24,8 +22,9 @@ enum class BoundTypes : unsigned char {
 
 class Bounds {
 public:
+    Bounds() = default;
     // constructor with type
-    Bounds(BoundTypes type = BoundTypes::AABB);
+    Bounds(BoundTypes type);
 
     // construct as sphere
     Bounds(glm::vec3 center, float radius);
@@ -62,6 +61,12 @@ public:
 
     bool operator==(Bounds br);
 };
+
+//namespace Octree {
+//    class node;
+//}
+
+
 
 
 #endif //MARCHING_CUBES_BOUNDS_H

@@ -120,7 +120,7 @@ void Octree::node::update(Box &box) {
         }
 
         for (int i = 0, listSize = objects.size(); i < listSize; i++) {
-            if (States::isActive(&objects[i].instance->state, INSTANCE_DEAD)) {
+            if (States::active(&objects[i].instance->state, INSTANCE_DEAD)) {
                 objects.erase(objects.begin() + i);
                 i--;
                 listSize--;
@@ -129,7 +129,7 @@ void Octree::node::update(Box &box) {
 
         std::stack<int> movedObjects;
         for (int i = 0, listSize = objects.size(); i < listSize; i++) {
-            if (States::isActive(&objects[i].instance->state, INSTANCE_MOVED)) {
+            if (States::active(&objects[i].instance->state, INSTANCE_MOVED)) {
                 objects[i].transform();
                 movedObjects.push(i);
             }

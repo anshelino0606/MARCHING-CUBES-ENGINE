@@ -31,13 +31,19 @@ namespace UniformMemory {
     class Element {
     public:
         Element(Type type = Type::SCALAR);
-
+        std::string typeStr();
         unsigned int alignPow2();
         unsigned int calcSize();
         unsigned int calcPadSize();
+
+        Type type;
+        unsigned int baseAlign;
+        unsigned int length;
+        std::vector<Element> list;
     };
 
-    inline Element newScalar(unsigned char dimension);
+    inline Element newScalar();
+    inline Element newVec(unsigned char dimension);
     inline Element newArray(unsigned int length, Element arrElement);
     inline Element newColMat(unsigned char cols, unsigned char rows);
     inline Element newColMatArray(unsigned int noMatrices, unsigned char cols, unsigned char rows);
@@ -74,8 +80,6 @@ namespace UniformMemory {
 
         bool pop();
 
-
-    private:
         Element block;
         unsigned int calculatedSize;
         GLuint bindingPos;

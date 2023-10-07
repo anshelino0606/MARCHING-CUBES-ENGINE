@@ -7,6 +7,7 @@
 
 
 #include "../CollisionMesh/CollisionMesh.h"
+#include "../../Graphics/Model/Model.h"
 #include <vector>
 
 class Model;

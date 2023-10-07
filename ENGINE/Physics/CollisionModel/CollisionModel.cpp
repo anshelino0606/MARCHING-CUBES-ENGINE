@@ -3,3 +3,6 @@
 //
 
 #include "CollisionModel.h"
+
+CollisionModel::CollisionModel(Model* model)
+        : model(model) {}

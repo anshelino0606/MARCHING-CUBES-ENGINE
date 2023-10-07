@@ -26,7 +26,8 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/Models/cube.hpp
         ENGINE/Models/light.hpp
         ENGINE/Models/plane.hpp
-        ENGINE/Models/sphere.hpp)
+        ENGINE/Models/sphere.hpp
+        ENGINE/Graphics/Text/TextRenderer.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

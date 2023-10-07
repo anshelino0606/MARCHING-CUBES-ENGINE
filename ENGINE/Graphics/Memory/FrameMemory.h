@@ -5,10 +5,20 @@
 #ifndef MARCHING_CUBES_FRAMEMEMORY_H
 #define MARCHING_CUBES_FRAMEMEMORY_H
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-class FrameMemory {
+#include "../Texture/Texture.h"
+#include "../Cubemap/Cubemap.h"
+
+#include <vector>
+
+class FrameBuffer {
 
 };
 
+class RenderBuffer {
+
+};
 
 #endif //MARCHING_CUBES_FRAMEMEMORY_H

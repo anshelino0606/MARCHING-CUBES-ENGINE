@@ -14,11 +14,11 @@
 
 #include <glm/glm.hpp>
 
-#include <jsoncpp/json.hpp>
+#include <json/json.h>
 
 #include "ENGINE/Graphics/Memory/FrameMemory.h"
 #include "ENGINE/Graphics/Memory/UniformMemory.h"
-#include "ENGINE/Graphics/Models/box.hpp"
+#include "ENGINE/Models/box.hpp"
 #include "ENGINE/Graphics/Model/Model.h"
 #include "ENGINE/Graphics/Light/Light.h"
 #include "ENGINE/Graphics/Shader/Shader.h"
@@ -105,20 +105,19 @@ public:
     glm::mat4 textProjection;
     glm::vec3 cameraPos;
 
-    avl* models;
+    AVL* models;
     trie::Trie<RigidBody*> instances;
 
     std::vector<RigidBody*> instancesToDelete;
     Octree::node* octree;
 
-    jsoncpp::json variableLog;
+    Json::Value variableLog;
 
-    FT_Library ft;
-    avl* fonts;
+    AVL* fonts;
 
-    FramebufferObject defaultFBO;
+    FrameBuffer defaultFBO;
 
-    UBO::UBO lightUBO;
+    UniformMemory::UBO lightUBO;
 
 protected:
     GLFWwindow* window;

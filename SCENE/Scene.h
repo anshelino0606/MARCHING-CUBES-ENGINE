@@ -20,7 +20,8 @@
 #include FT_FREETYPE_H
 
 #include "ENGINE/Graphics/Memory/FrameMemory.h"
-#include "ENGINE/Graphics/Memory/UniformMemory.h"
+#include "ENGINE/Graphics/Memory/VertexMemory.h"
+
 #include "ENGINE/Models/box.hpp"
 #include "ENGINE/Graphics/Model/Model.h"
 #include "ENGINE/Graphics/Light/Light.h"
@@ -39,6 +40,7 @@ namespace Octree {
 }
 
 class Model;
+
 
 class Scene {
 public:

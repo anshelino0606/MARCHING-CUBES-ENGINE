@@ -4,8 +4,6 @@
 
 #include "Scene.h"
 
-#include "scene.h"
-
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 2
 
@@ -115,7 +113,7 @@ bool Scene::init() {
     /*
         init model/instance trees
     */
-    models = AVL::createEmptyRoot();
+    models = models->createEmptyRoot();
     instances = trie::Trie<RigidBody*>(trie::ascii_lowercase);
 
     /*
@@ -130,7 +128,7 @@ bool Scene::init() {
         std::cout << "Could not init FreeType library" << std::endl;
         return false;
     }
-    fonts = AVL::createEmptyRoot();
+    fonts = fonts->createEmptyRoot();
 
     return true;
 }
@@ -138,7 +136,7 @@ bool Scene::init() {
 // register a font family
 bool Scene::registerFont(TextRenderer* tr, std::string name, std::string path) {
     if (tr->loadFont(ft, path)) {
-        fonts = AVL::insert(fonts, (void*)name.c_str(), tr);
+        fonts = fonts->insert(fonts, (void*)name.c_str(), tr);
         return true;
     }
     else {
@@ -323,7 +321,7 @@ void Scene::processInput(float dt) {
 // update screen before each frame
 void Scene::update() {
     // set background color
-    glClearColor(bg[0], bg[1], bg[2], bg[4]);
+    glClearColor(bg[0], bg[1], bg[2], bg[3]);
     // clear occupied bits
     defaultFBO.clear();
 }
@@ -422,7 +420,7 @@ void Scene::renderSpotLightShader(Shader shader, unsigned int idx) {
 
 // render specified model's instances
 void Scene::renderInstances(std::string modelId, Shader shader, float dt) {
-    void* val = AVL::get(models, (void*)modelId.c_str());
+    void* val = models->get(models, (void*)modelId.c_str());
     if (val) {
         // render each mesh in specified model
         shader.activate();
@@ -432,7 +430,7 @@ void Scene::renderInstances(std::string modelId, Shader shader, float dt) {
 
 // render text
 void Scene::renderText(std::string font, Shader shader, std::string text, float x, float y, glm::vec2 scale, glm::vec3 color) {
-    void* val = AVL::get(fonts, (void*)font.c_str());
+    void* val = fonts->get(fonts, (void*)font.c_str());
     if (val) {
         shader.activate();
         shader.setMat4("projection", textProjection);
@@ -443,14 +441,14 @@ void Scene::renderText(std::string font, Shader shader, std::string text, float 
 
 void Scene::cleanup() {
     instances.cleanup();
-    AVL::postorderTraverse(models, [](AVL* node) -> void {
+    models->postorderTraverse(models, [](AVL* node) -> void {
         ((Model*)node->val)->cleanup();
     });
-    AVL::free(models);
-    AVL::postorderTraverse(fonts, [](AVL* node) -> void {
+    models->free(models);
+    fonts->postorderTraverse(fonts, [](AVL* node) -> void {
         ((TextRenderer*)node->val)->cleanup();
     });
-    AVL::free(fonts);
+    fonts->free(fonts);
 
     // destroy octree
     octree->destroy();
@@ -486,13 +484,13 @@ void Scene::setWindowColor(float r, float g, float b, float a) {
 
 // register model into model trie
 void Scene::registerModel(Model* model) {
-    models = AVL::insert(models, (void*)model->id.c_str(), model);
+    models = models->insert(models, (void*)model->id.c_str(), model);
 }
 
 // generate instance of specified model with physical parameters
 RigidBody* Scene::generateInstance(std::string modelId, glm::vec3 size, float mass, glm::vec3 pos, glm::vec3 rot) {
     // generate new rigid body
-    void* val = AVL::get(models, (void*)modelId.c_str());
+    void* val = models->get(models, (void*)modelId.c_str());
     if (val) {
         Model* model = (Model*)val;
         RigidBody* rb = model->generateInstance(size, mass, pos, rot);
@@ -512,14 +510,14 @@ RigidBody* Scene::generateInstance(std::string modelId, glm::vec3 size, float ma
 
 // initialize model instances
 void Scene::initInstances() {
-    AVL::inorderTraverse(models, [](AVL* node) -> void {
+    models->inorderTraverse(models, [](AVL* node) -> void {
         ((Model*)node->val)->initInstances();
     });
 }
 
 // load model data
 void Scene::loadModels() {
-    AVL::inorderTraverse(models, [](AVL* node) -> void {
+    models->inorderTraverse(models, [](AVL* node) -> void {
         ((Model*)node->val)->init();
     });
 }
@@ -529,7 +527,7 @@ void Scene::removeInstance(std::string instanceId) {
     RigidBody* instance = instances[instanceId];
     // get instance's model
     std::string targetModel = instance->modelId;
-    Model* model = (Model*)AVL::get(models, (void*)targetModel.c_str());
+    Model* model = (Model*)models->get(models, (void*)targetModel.c_str());
 
     // delete instance from model
     model->removeInstance(instanceId);

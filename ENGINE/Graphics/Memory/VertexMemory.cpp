@@ -15,24 +15,20 @@ void BufferObject::bind() {
     glBindBuffer(type, val);
 }
 
-template<typename T>
-void BufferObject::setData(GLuint noElements, T* data, GLenum usage) {
-    glBufferData(type, noElements * sizeof(T), data, usage);
-}
+//template<typename T>
+//void BufferObject::setData(GLuint noElements, T* data, GLenum usage) {
+//
+//}
 
-template<typename T>
-void BufferObject::updateData(GLintptr offset, GLuint noElements, T* data) {
-    glBufferSubData(type, offset, noElements * sizeof(T), data);
-}
+//template<typename T>
+//void BufferObject::updateData(GLintptr offset, GLuint noElements, T* data) {
+//
+//}
 
-template<typename T>
-void BufferObject::setAttribPointer(GLuint index, GLint size, GLenum type, GLuint stride, GLuint offset, GLuint divisor) {
-    glVertexAttribPointer(index, size, type, GL_FALSE, stride * sizeof(T), (void*)(offset * sizeof(T)));
-    glEnableVertexAttribArray(index);
-    if (divisor > 0) {
-        glVertexAttribDivisor(index, divisor);
-    }
-}
+//template<typename T>
+//void BufferObject::setAttribPointer(GLuint index, GLint size, GLenum type, GLuint stride, GLuint offset, GLuint divisor) {
+//
+//}
 
 void BufferObject::clear() {
     glBindBuffer(type, 0);
@@ -58,8 +54,8 @@ void ArrayObject::draw(GLenum mode, GLuint first, GLuint count) {
     glDrawArrays(mode, first, count);
 }
 
-void ArrayObject::draw(GLenum mode, GLuint count, GLenum type, GLint indices, GLuint instanceCount) {
-    glDrawElementsInstanced(mode, count, type, (void*)indices, instanceCount);
+void ArrayObject::draw(GLenum mode, GLuint count, GLenum type, const void* indices, GLuint instanceCount) {
+    glDrawElementsInstanced(mode, count, type, indices, instanceCount);
 }
 
 void ArrayObject::cleanup() {

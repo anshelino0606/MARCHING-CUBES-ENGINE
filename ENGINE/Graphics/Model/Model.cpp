@@ -4,9 +4,6 @@
 
 #include "Model.h"
 
-#include "../../Physics/Environment/Environment.h"
-#include "../../../SCENE/Scene.h"
-#include "../../Algorithms/States/States.h"
 
 #include <iostream>
 #include <limits>
@@ -67,7 +64,7 @@ void Model::render(Shader shader, float dt, Scene* scene) {
 
         if (currentNoInstances) {
             modelVBO.bind();
-            modelVBO.updateData<glm::mat4>(0, currentNoInstances, &models[0]);
+            modelVBO.updateData<glm::mat4>(0, GLuint(currentNoInstances), &models[0]);
             normalModelVBO.bind();
             normalModelVBO.updateData<glm::mat3>(0, currentNoInstances, &normalModels[0]);
         }

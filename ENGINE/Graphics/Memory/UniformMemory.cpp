@@ -96,67 +96,6 @@ UniformMemory::Element::Element(UniformMemory::Type type)
         }
 }
 
-inline UniformMemory::Element UniformMemory::newScalar() {
-    return Element();
-}
-
-inline  UniformMemory::Element UniformMemory::newVec(unsigned char dim) {
-    switch (dim) {
-        case 2: return Type::VEC2;
-        case 3: return Type::VEC3;
-        case 4:
-        default:
-            return Type::VEC4;
-    };
-}
-
-inline  UniformMemory::Element UniformMemory::newArray(unsigned int length, Element arrElement) {
-    Element ret(Type::ARRAY);
-    ret.length = length;
-    ret.list = { arrElement };
-    ret.list.shrink_to_fit();
-
-    ret.baseAlign = arrElement.type == Type::STRUCT ?
-                    arrElement.baseAlign :
-                    roundPow2(arrElement.baseAlign, 4);
-
-    return ret;
-}
-
-inline UniformMemory::Element UniformMemory::newColMat(unsigned char cols, unsigned char rows) {
-    return newArray(cols, newVec(rows));
-}
-
-inline UniformMemory::Element UniformMemory::newColMatArray(unsigned int noMatrices, unsigned char cols, unsigned char rows) {
-    return newArray(noMatrices * cols, newVec(rows));
-}
-
-inline UniformMemory::Element UniformMemory::newRowMat(unsigned char rows, unsigned char cols) {
-    return newArray(rows, newVec(cols));
-}
-
-inline UniformMemory::Element UniformMemory::newRowMatArray(unsigned int noMatrices, unsigned char rows, unsigned char cols) {
-    return newArray(noMatrices * rows, newVec(cols));
-}
-
-inline UniformMemory::Element UniformMemory::newStruct(std::vector<Element> subelements) {
-    Element ret(Type::STRUCT);
-    ret.list.insert(ret.list.end(), subelements.begin(), subelements.end());
-    ret.length = ret.list.size();
-
-    // base alignment is largest of its subelements
-    if (subelements.size()) {
-        for (Element e : subelements) {
-            if (e.baseAlign > ret.baseAlign) {
-                ret.baseAlign = e.baseAlign;
-            }
-        }
-
-        ret.baseAlign = roundPow2(ret.baseAlign, 4);
-    }
-
-    return ret;
-}
 
 
 UniformMemory::UBO::UBO(GLuint bindingPos)
@@ -268,22 +207,22 @@ bool UniformMemory::UBO::pop() {
     return popped;
 }
 
-template<typename T>
-void UniformMemory::UBO::writeElement(T* data) {
-    Element element = getNextElement();
-    //std::cout << element.typeStr() << "--" << element.baseAlign << "--" << offset << "--";
-    offset = roundPow2(offset, element.alignPow2());
-    //std::cout << offset << std::endl;
-
-    glBufferSubData(GL_UNIFORM_BUFFER, offset, sizeof(T), data);
-
-    if (poppedOffset) {
-        offset = poppedOffset;
-    }
-    else {
-        offset += element.calcSize();
-    }
-}
+//template<typename T>
+//void UniformMemory::UBO::writeElement(T* data) {
+//    Element element = getNextElement();
+//    //std::cout << element.typeStr() << "--" << element.baseAlign << "--" << offset << "--";
+//    offset = roundPow2(offset, element.alignPow2());
+//    //std::cout << offset << std::endl;
+//
+//    glBufferSubData(GL_UNIFORM_BUFFER, offset, sizeof(T), data);
+//
+//    if (poppedOffset) {
+//        offset = poppedOffset;
+//    }
+//    else {
+//        offset += element.calcSize();
+//    }
+//}
 
 template<typename T>
 void UniformMemory::UBO::writeArray(T* first, unsigned int n) {
@@ -292,12 +231,10 @@ void UniformMemory::UBO::writeArray(T* first, unsigned int n) {
     }
 }
 
-template<typename T, typename V>
-void UniformMemory::UBO::writeArrayContainer(T* container, unsigned int n) {
-    for (int i = 0; i < n; i++) {
-        writeElement<V>(&container->operator[](i)); // container[i] translates to container + i
-    }
-}
+//template<typename T, typename V>
+//void UniformMemory::UBO::writeArrayContainer(T* container, unsigned int n) {
+//
+//}
 
 void UniformMemory::UBO::advanceCursor(unsigned int n) {
     // skip number of elements

@@ -153,17 +153,16 @@ void Octree::node::update(Box &box) {
             }
         }
 
-        if (children != nullptr) {
-            for (unsigned char flags = activeOctants, i = 0;
-                 flags > 0;
-                 flags >>= 1, i++) {
-                if (States::indexActive(&flags, 0)) {
-                    if (children[i] != nullptr) {
-                        children[i]->update(box);
-                    }
+        for (unsigned char flags = activeOctants, i = 0;
+             flags > 0;
+             flags >>= 1, i++) {
+            if (States::indexActive(&flags, 0)) {
+                if (children[i] != nullptr) {
+                    children[i]->update(box);
                 }
             }
         }
+
 
         Bounds movedObj;
         while (movedObjects.size() != 0) {
@@ -367,30 +366,30 @@ void Octree::node::checkCollisionsSelf(Bounds obj) {
 }
 
 void Octree::node::checkCollisionsChildren(Bounds obj) {
-    if (children) {
-        for (int flags = activeOctants, i = 0;
-             flags > 0;
-             flags >>= 1, i++) {
-            if (States::indexActive(&flags, 0) && children[i]) {
-                children[i]->checkCollisionsSelf(obj);
-                children[i]->checkCollisionsChildren(obj);
-            }
+
+    for (int flags = activeOctants, i = 0;
+         flags > 0;
+         flags >>= 1, i++) {
+        if (States::indexActive(&flags, 0) && children[i]) {
+            children[i]->checkCollisionsSelf(obj);
+            children[i]->checkCollisionsChildren(obj);
         }
     }
+
 }
 
 void Octree::node::destroy() {
-    if (children != nullptr) {
-        for (int flags = activeOctants, i = 0;
-             flags > 0;
-             flags >>= 1, i++) {
-            if (States::indexActive(&flags, 0)) {
-                if (children[i] != nullptr) {
-                    children[i]->destroy();
-                    children[i] = nullptr;
-                }
+
+    for (int flags = activeOctants, i = 0;
+         flags > 0;
+         flags >>= 1, i++) {
+        if (States::indexActive(&flags, 0)) {
+            if (children[i] != nullptr) {
+                children[i]->destroy();
+                children[i] = nullptr;
             }
         }
+
     }
 
     objects.clear();

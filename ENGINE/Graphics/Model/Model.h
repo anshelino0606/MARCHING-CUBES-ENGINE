@@ -21,17 +21,20 @@
 #include "../../Physics/CollisionModel/CollisionModel.h"
 #include "ENGINE/Physics/RigidBody/RigidBody.h"
 #include "../../Algorithms/Bounds/Bounds.h"
+#include "../../Physics/Environment/Environment.h"
+#include "../../../SCENE/Scene.h"
+#include "../../Algorithms/States/States.h"
 
 #define DYNAMIC	(unsigned int)1
 #define CONST_INSTANCES	(unsigned int)2
 #define NO_TEX (unsigned int)4
 
 class Scene;
+class BufferObject;
 
 class Model {
 public:
     Model(std::string id, unsigned int maxNoInstances, unsigned int flags = 0);
-
 
     std::string id;
     std::vector<Mesh> meshes;

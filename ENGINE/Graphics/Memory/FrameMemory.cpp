@@ -53,7 +53,7 @@ void FrameBuffer::activateRBO(GLenum attachType, GLenum format) {
 }
 
 void FrameBuffer::activateTexture(GLenum attachType, GLenum format, GLenum type) {
-    std::string name = "tex" + textures.size();
+    std::string name = &"tex" [ textures.size()];
     Texture tex(name);
 
     // allocate

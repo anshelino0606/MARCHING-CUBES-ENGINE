@@ -27,7 +27,16 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/Models/light.hpp
         ENGINE/Models/plane.hpp
         ENGINE/Models/sphere.hpp
-        ENGINE/Graphics/Text/TextRenderer.cpp)
+        ENGINE/Graphics/Text/TextRenderer.cpp
+        SCENE/Scene.cpp
+        ENGINE/Algebra/LinearAlgebra.cpp
+        ENGINE/IO/Camera.cpp
+        ENGINE/IO/Keyboard.cpp
+        ENGINE/IO/Mouse.cpp
+        ENGINE/IO/Screen.cpp
+        ENGINE/Algorithms/AVL/Avl.cpp
+        ENGINE/Algorithms/List/List.cpp
+        ENGINE/Algorithms/Trie/Trie.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

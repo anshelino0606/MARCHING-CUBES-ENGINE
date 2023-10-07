@@ -6,37 +6,57 @@
 #define MARCHING_CUBES_STATES_H
 
 
-class States {
-public:
+namespace States {
     template<typename T>
-    static bool indexActive(T* states, int target);
+    bool indexActive(T* states, int target)  {
+        return (*states & (1 << target));
+    }
 
     template<typename T>
-    static void activateIndex(T* states, int target);
+    void activateIndex(T *states, int target) {
+        *states |= 1 << target;
+    }
 
     template<typename T>
-    static void uniquelyActivateIndex(T* states, int target);
+    void uniquelyActivateIndex(T *states, int target) {
+        activateIndex<T>(states, target); // activate state first
+        *states &= 1 << target; // deactivate others
+    }
 
     template<typename T>
-    static void deactivateIndex(T* states, int target);
+    void deactivateIndex(T *states, int target) {
+        *states &= ~(1 << target);
+    }
 
     template<typename T>
-    static void toggleIndex(T* states, int target);
+    void toggleIndex(T *states, int target) {
+        *states ^= 1 << target;
+    }
 
     template<typename T>
-    static bool active(T* states, T state);
+    bool active(T* states, T state) {
+        return (*states & state);
+    }
 
     template<typename T>
-    static void activate(T* states, T state);
+    void activate(T* states, T state) {
+        *states |= state;
+    }
 
     template<typename T>
-    static void uniquelyActivate(T* states, T state);
+    void uniquelyActivate(T* states, T state) {
+        *states &= state;
+    }
 
     template<typename T>
-    static void deactivate(T* states, T state);
+    void deactivate(T* states, T state) {
+        *states &= ~state;
+    }
 
     template<typename T>
-    static void toggle(T* states, T state);
+    void toggle(T* states, T state) {
+        *states ^= state;
+    }
 };
 
 

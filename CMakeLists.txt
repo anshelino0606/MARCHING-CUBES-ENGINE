@@ -51,4 +51,7 @@ message("LIBRARIES = ${LIBRARIES}")
 
 target_link_libraries(MARCHING_CUBES PRIVATE ${LIBRARIES})
 
+find_package(Freetype REQUIRED)
+target_link_libraries(MARCHING_CUBES PRIVATE Freetype::Freetype)
+
 include_directories(libraries)

@@ -16,6 +16,7 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "../Memory/VertexMemory.h"
 #include "../Shader/shader.h"

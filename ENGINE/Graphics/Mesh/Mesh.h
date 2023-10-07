@@ -15,11 +15,11 @@
 #include "../Shader/Shader.h"
 #include "../Texture/Texture.h"
 #include "../Material/Material.h"
+#include "../../Algorithms/Bounds/Bounds.h"
+#include "../../Physics/CollisionMesh/CollisionMesh.h"
+
 
 #include <iostream>
-
-//#include "../../Algorithms/Bounds.h"
-
 
 struct Vertex {
     glm::vec3 pos;

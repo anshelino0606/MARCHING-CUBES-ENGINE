@@ -6,8 +6,18 @@
 #define MARCHING_CUBES_COLLISIONMODEL_H
 
 
-class CollisionModel {
+#include "../CollisionMesh/CollisionMesh.h"
+#include <vector>
 
+class Model;
+
+class CollisionModel {
+public:
+    CollisionModel(Model* model);
+
+    Model* model;
+
+    std::vector<CollisionMesh> meshes;
 };
 
 

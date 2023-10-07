@@ -6,16 +6,20 @@
 
 Shader::Shader() {}
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
-    generate(vertexShaderPath, fragmentShaderPath);
+Shader::Shader(bool includeDefaultDirectory,
+                     const char* vertexShaderPath, const char* fragmentShaderPath,
+                     const char* geometryShaderPath) {
+    generate(includeDefaultDirectory, vertexShaderPath, fragmentShaderPath, geometryShaderPath);
 }
 
-void Shader::generate(const char* vertexShaderPath, const char* fragmentShaderPath) {
+void Shader::generate(bool includeDefaultDirectory,
+                      const char* vertexShaderPath, const char* fragmentShaderPath,
+                      const char* geometryShaderPath) {
     int success;
     char infoLog[512];
 
-    GLuint vertexShader = compileShader(vertexShaderPath, GL_VERTEX_SHADER);
-    GLuint fragmentShader = compileShader(fragmentShaderPath, GL_FRAGMENT_SHADER);
+    GLuint vertexShader = compileShader(includeDefaultDirectory, vertexShaderPath, GL_VERTEX_SHADER);
+    GLuint fragmentShader = compileShader(includeDefaultDirectory, fragmentShaderPath, GL_FRAGMENT_SHADER);
 
     id = glCreateProgram();
     glAttachShader(id, vertexShader);
@@ -41,7 +45,10 @@ void Shader::cleanup() {
     glDeleteProgram(id);
 }
 
-std::string Shader::loadShaderSrc(const char *filepath) {
+std::string Shader::loadShaderSrc(bool includeDefaultDirectory, const char *filepath) {
+    if (includeDefaultDirectory)
+        std::string fullPath = Shader::defaultDirectory + '/' + filepath;
+
     std::ifstream file;
     std::stringstream buf;
 
@@ -61,12 +68,12 @@ std::string Shader::loadShaderSrc(const char *filepath) {
     return ret;
 }
 
-GLuint Shader::compileShader(const char *filepath, GLenum type) {
+GLuint Shader::compileShader(bool includeDefaultDirectory, const char *filepath, GLenum type) {
     int success;
     char infoLog[512];
 
     GLuint ret = glCreateShader(type);
-    std::string shaderSrc = loadShaderSrc(filepath);
+    std::string shaderSrc = loadShaderSrc(includeDefaultDirectory, filepath);
     const GLchar* shader = shaderSrc.c_str();
 
     glShaderSource(ret, 1, &shader, nullptr);
@@ -121,3 +128,16 @@ void Shader::setMat3(const std::string& name, glm::mat3 val) {
     glUniformMatrix3fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(val));
 }
 
+std::stringstream Shader::defaultHeader;
+
+void Shader::clearDefault() {
+    Shader::defaultHeader.clear();
+}
+
+void Shader::loadIntoDefault(const char* filepath) {
+    std::basic_string<char> fileContents = loadShaderSrc(false, filepath);
+
+    Shader::defaultHeader << fileContents;
+
+    fileContents = "";
+}

@@ -22,16 +22,23 @@ public:
 
     unsigned int id;
     Shader();
-    Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
+    Shader(bool includeDefaultDirectory,
+           const char* vertexShaderPath, const char* fragmentShaderPath,
+           const char* geometryShaderPath = nullptr);
 
-    void generate(const char* vertexShaderPath, const char* fragmentShaderPath);
+    void generate(bool includeDefaultDirectory,
+                const char* vertexShaderPath, const char* fragmentShaderPath,
+                const char* geometryShaderPath = nullptr);
 
     void activate();
     void cleanup();
 
     // utility
-    std::string loadShaderSrc(const char* filepath);
-    GLuint compileShader(const char* filepath, GLenum type);
+    static std::string loadShaderSrc(bool includeDefaultDirectory, const char* filepath);
+    GLuint compileShader(bool includeDefaultDirectory, const char* filepath, GLenum type);
+    static void loadIntoDefault(const char* filepath);
+    static void clearDefault();
+
 
     // uniform
     void setMat4(const std::string &name, glm::mat4 value);
@@ -45,6 +52,8 @@ public:
     void set4Float(const std::string& name, glm::vec4 v);
     void setMat3(const std::string& name, glm::mat3 val);
 
+    static std::string defaultDirectory;
+    static std::stringstream defaultHeader;
 };
 
 

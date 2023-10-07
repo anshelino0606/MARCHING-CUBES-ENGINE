@@ -16,8 +16,9 @@
 #include "../Texture/Texture.h"
 #include "../Material/Material.h"
 
+#include <iostream>
 
-//#include "../../algorithms/bounds.h"
+//#include "../../Algorithms/Bounds.h"
 
 
 struct Vertex {

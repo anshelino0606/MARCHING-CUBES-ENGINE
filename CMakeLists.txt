@@ -22,7 +22,11 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/Graphics/Memory/UniformMemory.cpp
         ENGINE/Physics/Environment/Environment.cpp
         ENGINE/Physics/CollisionModel/CollisionModel.cpp
-        ENGINE/Physics/CollisionMesh/CollisionMesh.cpp)
+        ENGINE/Physics/CollisionMesh/CollisionMesh.cpp
+        ENGINE/Models/cube.hpp
+        ENGINE/Models/light.hpp
+        ENGINE/Models/plane.hpp
+        ENGINE/Models/sphere.hpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -38,5 +42,13 @@ set(ASSIMP_ROOT "/opt/homebrew/Cellar/assimp/5.2.5" CACHE PATH "Assimp root dire
 find_package(assimp REQUIRED HINTS ${ASSIMP_ROOT})
 include_directories(${ASSIMP_INCLUDE_DIRS})
 target_link_libraries(MARCHING_CUBES PRIVATE ${ASSIMP_LIBRARIES})
+
+include_directories(  /opt/homebrew/Cellar/jsoncpp/1.9.5/include )
+link_directories(  /opt/homebrew/Cellar/jsoncpp/1.9.5/lib )
+
+file(GLOB LIBRARIES "/opt/homebrew/Cellar/jsoncpp/1.9.5/lib/*.dylib")
+message("LIBRARIES = ${LIBRARIES}")
+
+target_link_libraries(MARCHING_CUBES PRIVATE ${LIBRARIES})
 
 include_directories(libraries)

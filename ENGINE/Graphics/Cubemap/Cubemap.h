@@ -15,7 +15,8 @@
 #include <vector>
 
 #include "../Shader/Shader.h"
-//#include "../Memory/"
+#include "../Memory/VertexMemory.h"
+
 
 class Scene;
 

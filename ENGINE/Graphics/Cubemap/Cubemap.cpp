@@ -5,6 +5,8 @@
 #include "Cubemap.h"
 
 #include "../../../SCENE/Scene.h"
+#include "../Memory/VertexMemory.h"
+#include "../Memory/FrameMemory.h"
 
 Cubemap::Cubemap()
         : hasTextures(false) {}
@@ -135,7 +137,7 @@ void Cubemap::init() {
     VAO["VBO"].setData<float>(36 * 3, skyboxVertices, GL_STATIC_DRAW);
 
     // set attribute pointers
-    VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 3, 0);
+    VAO["VBO"].setAttribPointer<GLfloat>(0, 3, GL_FLOAT, 3, 0);
 
     VAO["VBO"].clear();
 

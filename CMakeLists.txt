@@ -16,7 +16,10 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/Algorithms/Octree/Octree.cpp
         ENGINE/Algorithms/Bounds/Bounds.cpp
         ENGINE/Graphics/Model/Model.cpp
-        ENGINE/Physics/RigidBody/RigidBody.cpp)
+        ENGINE/Physics/RigidBody/RigidBody.cpp
+        ENGINE/Graphics/Memory/VertexMemory.cpp
+        ENGINE/Graphics/Memory/FrameMemory.cpp
+        ENGINE/Graphics/Memory/UniformMemory.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

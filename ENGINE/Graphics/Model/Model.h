@@ -33,7 +33,7 @@ public:
     std::string id;
     std::vector<Mesh> meshes;
     CollisionModel* collision;
-    std::vector<BoundingRegion> boundingRegions;
+    std::vector<Bounds> boundingRegions;
     std::vector<RigidBody*> instances;
     unsigned int maxNoInstances;
     unsigned int currentNoInstances;

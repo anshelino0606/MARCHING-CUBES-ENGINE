@@ -19,7 +19,10 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/Physics/RigidBody/RigidBody.cpp
         ENGINE/Graphics/Memory/VertexMemory.cpp
         ENGINE/Graphics/Memory/FrameMemory.cpp
-        ENGINE/Graphics/Memory/UniformMemory.cpp)
+        ENGINE/Graphics/Memory/UniformMemory.cpp
+        ENGINE/Physics/Environment/Environment.cpp
+        ENGINE/Physics/CollisionModel/CollisionModel.cpp
+        ENGINE/Physics/CollisionMesh/CollisionMesh.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

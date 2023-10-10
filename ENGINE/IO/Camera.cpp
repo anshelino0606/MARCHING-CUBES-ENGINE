@@ -25,7 +25,7 @@ void Camera::updateCameraDirection(double dx, double dy) {
 }
 
 void Camera::updateCameraPos(CameraDirection direction, double dt) {
-    float velocity = static_cast<float>(dt) * speed;
+    float velocity = static_cast<float>(dt) * 25;
     switch (direction) {
         case CameraDirection::FORWARD:
             cameraPos += cameraFront * velocity;

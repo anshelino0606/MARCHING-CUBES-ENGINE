@@ -1,269 +1,92 @@
-//
-// Created by Anhelina Modenko on 06.10.2023.
-//
+#ifndef AVL_H
+#define AVL_H
 
-#ifndef MARCHING_CUBES_AVL_H
-#define MARCHING_CUBES_AVL_H
+// max function macro
+#define MAX(a, b) (a > b ? a : b)
 
-#define MAX(a,b) (a > b ? a : b)
-
-class AVL {
-public:
-
+// avl structure
+typedef struct AVL
+{
     void* key;
     void* val;
     int height;
 
-    AVL* left;
-    AVL* right;
-    
-    int (*keycmp)(void* key, void* other);
+    struct AVL* left;
+    struct AVL* right;
 
-public:
-    AVL(int (*keycmp)(void* key, void* other)){
-        this->key = nullptr;
-        this->val = nullptr;
-        this->keycmp = keycmp;
-    }
+    int (*keycmp)(void* key1, void* key2);
+} AVL;
 
-    AVL* createRoot(void* key, void* val, int (*keycmp)(void* val1, void* val2)) {
-        AVL* result = new AVL(keycmp);
-        if (!result)
-            return nullptr;
-        result->key = key;
-        result->val = val;
-        result->height = 1;
+/*
+    allocation
+*/
+// create root with key and value
+AVL* avl_createRoot(void* key, void* val, int (*keycmp)(void* val1, void* val2));
+// create root with null key and value
+AVL* avl_createEmptyRoot(int (*keycmp)(void* val1, void* val2));
 
-        result->left = nullptr;
-        result->right = nullptr;
+/*
+    accessor functions
+*/
+// get the smallest key in a subtree
+AVL* avl_smallestKey(AVL* root);
+// get the height of a root
+int avl_height(AVL* root);
+// get the balance factor of a root
+int avl_balanceFactor(AVL* root);
 
-        result->keycmp = keycmp;
+/*
+    operation functions
+*/
+// insert into avl
+AVL* avl_insert(AVL* root, void* key, void* val);
+// insert into bst
+AVL* avl_bst_insert(AVL* root, void* key, void* val);
+// remove from avl
+AVL* avl_remove(AVL* root, void* key);
+// remove from bst
+AVL* avl_bst_remove(AVL* root, void* key);
+// rebalance the avl
+AVL* avl_rebalance(AVL* root);
+// rotate right around a root
+AVL* avl_rotateRight(AVL* root);
+// rotate left around a root
+AVL* avl_rotateLeft(AVL* root);
+// calcualte the height of a root considering the children's heights
+void avl_recalcHeight(AVL* root);
+// get the value stored with a key
+void* avl_get(AVL* root, void* key);
 
-        return result;
-    }
+/*
+    traversal methods
+*/
+// inorder traversal
+void avl_inorderTraverse(AVL* root, void (*visit)(AVL* node));
+// preorder traversal
+void avl_preorderTraverse(AVL* root, void (*visit)(AVL* node));
+// postorder traversal
+void avl_postorderTraverse(AVL* root, void (*visit)(AVL* node));
 
-    AVL* createEmptyRoot() {
-        return createRoot(nullptr, nullptr, keycmp);
-    }
+/*
+    freeing methods
+*/
+// free node memory
+void avl_deleteNode(AVL* node);
+// free key, value, and node memory
+void avl_deleteNodeDeep(AVL* node);
+// free subtree memory
+void avl_free(AVL* root);
+// free subtree memory, including keys and values
+void avl_freeDeep(AVL* root);
 
-    AVL* smallestKey(AVL* root) {
-        return root->left ? smallestKey(root->left) : root;
-    }
+/*
+    default key comparisons
+    format:
+        int <name>cmp(void *key1, void *key2);
+*/
+// string keys
+int strkeycmp(void* key1, void* key2);
+// integer keys
+int intkeycmp(void* key1, void* key2);
 
-
-    int getHeight(AVL* avl) {
-        return avl ? height : 0;
-    }
-
-    int balanceFactor(AVL* avl) {
-        return avl ? getHeight(left) - getHeight(right) : 0;
-    }
-
-    AVL* insert(AVL* avl, void* key, void* val) {
-        AVL* newAVL = bstInsert(avl, key, val);
-        newAVL = rebalance(newAVL);
-
-        return newAVL;
-    }
-
-    AVL* remove(AVL* root, void* key) {
-        AVL* newRoot = bstRemove(root, key);
-        newRoot = rebalance(newRoot);
-
-        return newRoot;
-    }
-
-    void* get(AVL* root, void* key) {
-        if (!root)
-            return nullptr;
-
-        char cmp = root->keycmp(key, root->key);
-        if (!cmp)
-            return root->val;
-        else if (cmp>0)
-            return root->right ? get(root->right, key) : nullptr;
-        else
-            return root->left ? get(root->left, key) : nullptr;
-    }
-
-    void inorderTraverse(AVL* root, void (*visit)(AVL* avl)) {
-        if (root->left)
-            inorderTraverse(root->left, visit);
-
-        visit(root);
-        if (root->right)
-            inorderTraverse(root->right, visit);
-    }
-
-    void preorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
-        visit(root);
-
-        if (root->left)
-            preorderTraverse(root->left, visit);
-        if (root->right)
-            preorderTraverse(root->right, visit);
-    }
-
-    void postorderTraverse(AVL* root, void (*visit)(AVL* AVL)) {
-        if (root->left)
-            postorderTraverse(root->left, visit);
-        if (root->right)
-            postorderTraverse(root->right, visit);
-        visit(root);
-    }
-
-    static void deleteAVL(AVL* AVL) {
-        delete AVL;
-    }
-
-    static void deleteAVLDeep(AVL* AVL) {
-        AVL->key = nullptr;
-        AVL->val = nullptr;
-        delete AVL;
-    }
-
-    void free(AVL* root) {
-        postorderTraverse(root, deleteAVL);
-    }
-
-    void freeDeep(AVL* root) {
-        postorderTraverse(root, deleteAVLDeep);
-    }
-
-private:
-    AVL* bstInsert(AVL* avl, void* key, void* val) {
-        if (!avl) {
-            avl->key = key;
-            avl->val = val;
-            avl->height = 1;
-            return avl;
-        }
-
-        if (keycmp(key, avl->key) < 0) {
-            if (avl->left)
-                avl->left = insert(avl->left, key, val);
-            else
-                avl->left = createRoot(key, val, keycmp);
-        } else {
-            if (avl->right)
-                avl->right = insert(avl->right, key, val);
-            else
-                avl->right = createRoot(key, val, keycmp);
-        }
-        recalcHeight(avl);
-        return avl;
-    }
-
-    AVL* bstRemove(AVL* avl, void* key) {
-        int cmp = avl->keycmp(key, avl->key);
-        if (cmp < 0) {
-            if (avl->left) {
-                avl->left = avl->remove(avl->left, key);
-                recalcHeight(avl->left);
-            }
-        } else if (cmp > 0) {
-            if (avl->right) {
-                avl->right = remove(avl->right, key);
-                recalcHeight(avl->right);
-            }
-        } else {
-                // leaf node
-                if (!avl->left && !avl->right) {
-                    free(avl);
-                    return nullptr;
-                }
-                // has one child
-                if (avl->left && !avl->right) {
-                    AVL* result = avl->left;
-                    free(avl);
-                    return result;
-                } else if (!avl->left && !avl->right) {
-                    AVL* result = avl->right;
-                    free(avl);
-                    return result;
-                }
-                // has both children
-                AVL* substitution = smallestKey(avl->right);
-                avl->key = substitution->key;
-                avl->val = substitution->val;
-                avl = remove(avl->right, avl->key);
-        }
-        recalcHeight(avl);
-        return avl;
-    }
-
-    AVL* rebalance(AVL* avl) {
-        int bf = balanceFactor(avl);
-        if (bf < -1 || bf > 1) {
-            /*
-            * left-left
-            * - right rotation arount the root
-            */
-            if (bf > 1 && balanceFactor(avl->left) >= 0) {
-                avl = rotateRight(avl);
-            }
-            /*
-             * left-right
-             * - left rotation around child
-             * - rotate right arout root
-             */
-            else if (bf > 1) {
-                avl->left = rotateLeft(avl->left);
-                avl = rotateRight(avl);
-            }
-            /*
-             * right-right
-             * - left rotation around root
-             */
-            else if (bf < -1 && balanceFactor(avl->right) <= 0) {
-                avl = rotateLeft(avl);
-            }
-            /*
-             * right-left
-             * - right rotation around child
-             * - left rotation around root
-             */
-            else {
-                avl->right = rotateRight(avl->right);
-                avl = rotateLeft(avl);
-            }
-        }
-        return avl;
-    }
-
-    AVL* rotateRight(AVL* avl) {
-        if (!avl->left)
-            return avl;
-
-        AVL* newAvl = avl->left;
-        avl->left = newAvl->right;
-        newAvl->right = avl;
-
-        recalcHeight(avl);
-        recalcHeight(newAvl);
-
-        return newAvl;
-    }
-
-    AVL* rotateLeft(AVL* avl) {
-        if (!avl->right)
-            return avl;
-
-        AVL* newAvl = avl->right;
-        avl->right = newAvl->left;
-        newAvl->left = avl;
-
-        recalcHeight(avl);
-        recalcHeight(newAvl);
-
-        return newAvl;
-    }
-
-    void recalcHeight(AVL* avl) {
-        if (avl)
-            avl->height = 1 + MAX(getHeight(avl->left), getHeight(avl->right));
-    }
-};
-
-
-#endif //MARCHING_CUBES_AVL_H
+#endif

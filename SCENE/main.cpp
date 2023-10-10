@@ -1,3 +1,4 @@
+#define GLFW_INCLUDE_GLCOREARB
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -48,10 +49,10 @@ double dt = 0.0f; // tme btwn frames
 double lastFrame = 0.0f; // time of last frame
 
 Sphere sphere(10);
-//Cube cube(10);
+Cube cube(10);
 LampLight lamp(4);
 
-std::string Shader::defaultDirectory = "assets/shaders";
+std::string Shader::defaultDirectory = "/Users/anhelinamodenko/CLionProjects/MARCHING-CUBES/ASSETS/Shaders";
 
 #include "ENGINE/Physics/CollisionMesh/CollisionMesh.h"
 
@@ -59,7 +60,7 @@ int main() {
     std::cout << "Hello, OpenGL!" << std::endl;
 
     // construct scene
-    scene = Scene(3, 3, "OpenGL Tutorial", 1200, 720);
+    scene = Scene(3, 3, "OpenGL Tutorial", 1680*2, 1020*2);
     // test if GLFW successfully started and created window
     if (!scene.init()) {
         std::cout << "Could not open window" << std::endl;
@@ -72,33 +73,35 @@ int main() {
     scene.activeCamera = 0;
 
     // SHADERS===============================
-    Shader::loadIntoDefault("defaultHead.gh");
+    Shader::loadIntoDefault("defaultHead.geom");
 
-    Shader shader(false, "instanced/instanced.vs", "object.fs");
-    Shader boxShader(false, "instanced/box.vs", "instanced/box.fs");
+    Shader shader(true, "Instanced/instanced.vert", "object.frag");
+    Shader boxShader(false, "Instanced/box.vert", "Instanced/box.frag");
 
-    Shader dirShadowShader(false, "shadows/dirSpotShadow.vs",
-                           "shadows/dirShadow.fs");
-    Shader spotShadowShader(false, "shadows/dirSpotShadow.vs",
-                            "shadows/pointSpotShadow.fs");
-    Shader pointShadowShader(false, "shadows/pointShadow.vs",
-                             "shadows/pointSpotShadow.fs",
-                             "shadows/pointShadow.gs");
+    Shader dirShadowShader(false, "Shadows/dirSpot.vert",
+                           "Shadows/dirShadow.frag");
+    Shader spotShadowShader(false, "Shadows/dirSpot.vert",
+                            "Shadows/pointShadow.frag");
+    Shader pointShadowShader(false, "Shadows/pointShadow.vert",
+                             "Shadows/pointShadow.frag",
+                             "Shadows/pointShadow.geom");
 
     Shader::clearDefault();
 
+
     // FONTS===============================
-    TextRenderer font(32);
-    if (!scene.registerFont(&font, "comic", "assets/fonts/comic.ttf")) {
-        std::cout << "Could not load font" << std::endl;
-    }
+//    TextRenderer font(32);
+//    if (!scene.registerFont(&font, "comic", "ASSETS/Fonts/comic.ttf")) {
+//        std::cout << "Could not load font" << std::endl;
+//    }
 
     // MODELS==============================
     scene.registerModel(&lamp);
 
     scene.registerModel(&sphere);
 
-    //scene.registerModel(&cube);
+    scene.registerModel(&cube);
+
 
     Box box;
     box.init();
@@ -158,9 +161,9 @@ int main() {
             0.1f, 100.0f
     );
     scene.spotLights.push_back(&spotLight);
-    //scene.activeSpotLights = 1; // 0b00000001
+    scene.activeSpotLights = 1; // 0b00000001
 
-    //scene.generateInstance(cube.id, glm::vec3(20.0f, 0.1f, 20.0f), 100.0f, glm::vec3(0.0f, -3.0f, 0.0f));
+    scene.generateInstance(cube.id, glm::vec3(20.0f, 0.1f, 20.0f), 100.0f, glm::vec3(0.0f, -3.0f, 0.0f));
     glm::vec3 cubePositions[] = {
             { 1.0f, 3.0f, -5.0f },
             { -7.25f, 2.1f, 1.5f },
@@ -173,7 +176,7 @@ int main() {
             { 0.0f, 5.0f, 0.0f }
     };
     for (unsigned int i = 0; i < 9; i++) {
-        //scene.generateInstance(cube.id, glm::vec3(0.5f), 1.0f, cubePositions[i]);
+        scene.generateInstance(cube.id, glm::vec3(0.5f), 1.0f, cubePositions[i]);
     }
 
     // instantiate instances
@@ -217,27 +220,27 @@ int main() {
         }
 
         //// render scene to dirlight FBO
-        //dirLight.shadowFBO.activate();
-        //scene.renderDirLightShader(dirShadowShader);
-        //renderScene(dirShadowShader);
+        dirLight.shadowFBO.activate();
+        scene.renderDirLightShader(dirShadowShader);
+        renderScene(dirShadowShader);
 
         //// render scene to point light FBOs
-        //for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
-        //    if (States::isIndexActive(&scene.activePointLights, i)) {
-        //        scene.pointLights[i]->shadowFBO.activate();
-        //        scene.renderPointLightShader(pointShadowShader, i);
-        //        renderScene(pointShadowShader);
-        //    }
-        //}
+        for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
+            if (States::indexActive(&scene.activePointLights, i)) {
+                scene.pointLights[i]->shadowFBO.activate();
+                scene.renderPointLightShader(pointShadowShader, i);
+                renderScene(pointShadowShader);
+            }
+        }
 
         //// render scene to spot light FBOs
-        //for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
-        //    if (States::isIndexActive(&scene.activeSpotLights, i)) {
-        //        scene.spotLights[i]->shadowFBO.activate();
-        //        scene.renderSpotLightShader(spotShadowShader, i);
-        //        renderScene(spotShadowShader);
-        //    }
-        //}
+        for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
+            if (States::indexActive(&scene.activeSpotLights, i)) {
+                scene.spotLights[i]->shadowFBO.activate();
+                scene.renderSpotLightShader(spotShadowShader, i);
+                renderScene(spotShadowShader);
+            }
+        }
 
         // render scene normally
         scene.defaultFBO.activate();
@@ -245,8 +248,8 @@ int main() {
         renderScene(shader);
 
         // render boxes
-        scene.renderShader(boxShader, false);
-        box.render(boxShader);
+//        scene.renderShader(boxShader, false);
+//        box.render(boxShader);
 
         // send new frame to window
         scene.newFrame(box);
@@ -257,6 +260,7 @@ int main() {
 
     // clean up objects
     scene.cleanup();
+    std::cout << "DONE" << std::endl;
     return 0;
 }
 
@@ -265,17 +269,17 @@ void renderScene(Shader shader) {
         scene.renderInstances(sphere.id, shader, dt);
     }
 
-    //scene.renderInstances(cube.id, shader, dt);
+    scene.renderInstances(cube.id, shader, dt);
 
     scene.renderInstances(lamp.id, shader, dt);
 
 }
 
 void launchItem(float dt) {
-    RigidBody* rb = scene.generateInstance(sphere.id, glm::vec3(0.1f), 1.0f, cam.cameraPos);
+    RigidBody* rb = scene.generateInstance(sphere.id, glm::vec3(0.3f), 3.0f, cam.cameraPos);
     if (rb) {
         // instance generated successfully
-        rb->transferEnergy(25.0f, cam.cameraFront);
+        rb->transferEnergy(5.0f, cam.cameraFront);
         rb->applyAcceleration(Environment::gravitationalAcceleration);
     }
 }

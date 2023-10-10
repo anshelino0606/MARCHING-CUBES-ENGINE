@@ -9,7 +9,7 @@ public:
             : Model("sphere", maxNoInstances, NO_TEX | DYNAMIC) {}
 
     void init() {
-        loadModel("ASSETS/Models/sphere/scene.gltf");
+        loadModel("/Users/anhelinamodenko/CLionProjects/MARCHING-CUBES/ASSETS/Models/sphere/scene.gltf");
     }
 };
 

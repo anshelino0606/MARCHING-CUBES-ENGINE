@@ -9,7 +9,7 @@ class Cube : public Model {
 public:
     Material m;
 
-    Cube(unsigned int maxNoInstances, Material m = Material::red_plastic)
+    Cube(unsigned int maxNoInstances, Material m = Material::black_plastic)
             : Model("cube", maxNoInstances, CONST_INSTANCES | NO_TEX), m(m) {}
 
     void init() {
@@ -90,7 +90,6 @@ public:
                 7, 3, 2
         };
 
-        //BoundingRegion br(glm::vec3(-0.5f), glm::vec3(0.5f));
         Bounds br(glm::vec3(0.0f), sqrt(3.0f) / 2.0f);
 
         Mesh ret = processMesh(br,

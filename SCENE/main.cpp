@@ -3,6 +3,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "LIBRARIES/imgui/imgui.h"
+#include "LIBRARIES/imgui/backends/imgui_impl_glfw.h"
+#include "LIBRARIES/imgui/backends/imgui_impl_opengl3.h"
+
 #include <string>
 #include <vector>
 #include <stack>
@@ -121,7 +125,7 @@ int main() {
 
     // point lights
     glm::vec3 pointLightPositions[] = {
-            glm::vec3(1.0f, 1.0f, 0.0f),
+            glm::vec3(0.0f, 5.0f, 0.0f),
             glm::vec3(0.0f,  15.0f,  0.0f),
             glm::vec3(-4.0f,  2.0f, -12.0f),
             glm::vec3(0.0f,  0.0f, -3.0f)
@@ -144,7 +148,7 @@ int main() {
                 0.5f, 50.0f
         );
         // create physical model for each lamp
-        scene.generateInstance(lamp.id, glm::vec3(10.0f, 0.25f, 10.0f), 0.25f, pointLightPositions[i]);
+        scene.generateInstance(lamp.id, glm::vec3(2.0f, 2.f, 2.0f), 0.5f, pointLightPositions[i]);
         // add lamp to scene's light source
         scene.pointLights.push_back(&pointLights[i]);
         // activate lamp in scene
@@ -163,21 +167,8 @@ int main() {
     scene.spotLights.push_back(&spotLight);
     scene.activeSpotLights = 1; // 0b00000001
 
-    scene.generateInstance(cube.id, glm::vec3(20.0f, 0.1f, 20.0f), 100.0f, glm::vec3(0.0f, -3.0f, 0.0f));
-    glm::vec3 cubePositions[] = {
-            { 1.0f, 3.0f, -5.0f },
-            { -7.25f, 2.1f, 1.5f },
-            { -15.0f, 2.55f, 9.0f },
-            { 4.0f, -3.5f, 5.0f },
-            { 2.8f, 1.9f, -6.2f },
-            { 3.5f, 6.3f, -1.0f },
-            { -3.4f, 10.9f, -5.5f },
-            { 0.0f, 11.0f, 0.0f },
-            { 0.0f, 5.0f, 0.0f }
-    };
-    for (unsigned int i = 0; i < 9; i++) {
-        scene.generateInstance(cube.id, glm::vec3(0.5f), 1.0f, cubePositions[i]);
-    }
+    scene.generateInstance(cube.id, glm::vec3(30.0f, 0.01f, 30.0f), 100.0f, glm::vec3(0.0f, -4.0f, 0.0f));
+//
 
     // instantiate instances
     scene.initInstances();
@@ -185,21 +176,29 @@ int main() {
     // finish preparations (octree, etc)
     scene.prepare(box, { shader });
 
-    // joystick recognition
-    /*mainJ.update();
-    if (mainJ.isPresent()) {
-        std::cout << mainJ.getName() << " is present." << std::endl;
-    }*/
-
     scene.variableLog["time"] = (double)0.0;
 
     scene.defaultFBO.bind(); // bind default framebuffer
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    ImGui_ImplGlfw_InitForOpenGL(scene.window, true);
+    ImGui_ImplOpenGL3_Init();
+
+
 
     while (!scene.shouldClose()) {
         // calculate dt
         double currentTime = glfwGetTime();
         dt = currentTime - lastFrame;
         lastFrame = currentTime;
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::ShowDemoWindow();
 
 //        scene.variableLog["time"] += dt;
         scene.variableLog["fps"] = 1 / dt;
@@ -210,7 +209,6 @@ int main() {
         // process input
         processInput(dt);
 
-        // activate the directional light's FBO
 
         // remove launch objects if too far
         for (int i = 0; i < sphere.currentNoInstances; i++) {
@@ -219,28 +217,28 @@ int main() {
             }
         }
 
-        //// render scene to dirlight FBO
+        // render scene to dirlight FBO
         dirLight.shadowFBO.activate();
         scene.renderDirLightShader(dirShadowShader);
         renderScene(dirShadowShader);
 
         //// render scene to point light FBOs
-        for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
-            if (States::indexActive(&scene.activePointLights, i)) {
-                scene.pointLights[i]->shadowFBO.activate();
-                scene.renderPointLightShader(pointShadowShader, i);
-                renderScene(pointShadowShader);
-            }
-        }
+//        for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
+//            if (States::indexActive(&scene.activePointLights, i)) {
+//                scene.pointLights[i]->shadowFBO.activate();
+//                scene.renderPointLightShader(pointShadowShader, i);
+//                renderScene(pointShadowShader);
+//            }
+//        }
 
         //// render scene to spot light FBOs
-        for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
-            if (States::indexActive(&scene.activeSpotLights, i)) {
-                scene.spotLights[i]->shadowFBO.activate();
-                scene.renderSpotLightShader(spotShadowShader, i);
-                renderScene(spotShadowShader);
-            }
-        }
+//        for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
+//            if (States::indexActive(&scene.activeSpotLights, i)) {
+//                scene.spotLights[i]->shadowFBO.activate();
+//                scene.renderSpotLightShader(spotShadowShader, i);
+//                renderScene(spotShadowShader);
+//            }
+//        }
 
         // render scene normally
         scene.defaultFBO.activate();
@@ -251,12 +249,21 @@ int main() {
 //        scene.renderShader(boxShader, false);
 //        box.render(boxShader);
 
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         // send new frame to window
         scene.newFrame(box);
 
+
+
         // clear instances that have been marked for deletion
         scene.clearDeadInstances();
+
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     // clean up objects
     scene.cleanup();
@@ -290,9 +297,10 @@ void processInput(double dt) {
     scene.processInput(dt);
 
     // close window
-    if (Keyboard::key(GLFW_KEY_ESCAPE)) {
+    if (Keyboard::key(GLFW_KEY_X)) {
         scene.setShouldClose(true);
     }
+
 
     // update flash light
     if (States::indexActive(&scene.activeSpotLights, 0)) {

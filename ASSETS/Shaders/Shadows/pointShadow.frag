@@ -1,27 +1,17 @@
 #version 330 core
 
-// taken from LearnOpenGL by Joey de Vries
-// https://learnopengl.com/code_viewer_gh.php?code=src/5.advanced_lighting/3.2.2.point_shadows_soft/3.2.2.point_shadows_depth.gs
+in vec4 FragPos;
 
-layout (triangles) in;
-layout (triangle_strip, max_vertices=18) out; // 6 faces = 6 trianges = 18 vertices
-
-uniform mat4 lightSpaceMatrices[6];
-
-out vec4 FragPos;
+uniform vec3 lightPos;
+uniform float farPlane;
 
 void main() {
-    for (int face = 0; face < 6; face++) {
-        // built in variable to determine face on the cubemap
-        gl_Layer = face;
+    // get distance between the fragment and the light position
+    float lightDist = length(FragPos.xyz - lightPos);
 
-        // render triangle
-        for (int i = 0; i < 3; i++) {
-            FragPos = gl_in[i].gl_Position;
-            gl_Position = lightSpaceMatrices[face] * FragPos;
-            EmitVertex();
-        }
+    // map to [0, 1]
+    lightDist /= farPlane;
 
-        EndPrimitive();
-    }
+    // write to depth map
+    gl_FragDepth = lightDist;
 }

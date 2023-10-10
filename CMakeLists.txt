@@ -36,7 +36,14 @@ add_executable(MARCHING_CUBES SCENE/main.cpp
         ENGINE/IO/Screen.cpp
         ENGINE/Algorithms/AVL/Avl.cpp
         ENGINE/Algorithms/List/List.cpp
-        ENGINE/Algorithms/Trie/Trie.cpp)
+        ENGINE/Algorithms/Trie/Trie.cpp
+        LIBRARIES/imgui/imgui.cpp
+        LIBRARIES/imgui/imgui_demo.cpp
+        LIBRARIES/imgui/imgui_draw.cpp
+        LIBRARIES/imgui/imgui_widgets.cpp
+        LIBRARIES/imgui/imgui_tables.cpp
+        LIBRARIES/imgui/backends/imgui_impl_opengl3.cpp
+        LIBRARIES/imgui/backends/imgui_impl_glfw.cpp)
 
 target_include_directories(MARCHING_CUBES PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

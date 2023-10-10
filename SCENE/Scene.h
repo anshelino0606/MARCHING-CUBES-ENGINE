@@ -41,6 +41,10 @@ namespace Octree {
 
 class Model;
 
+enum class WindowStates {
+    ACTIVE,
+    MENU
+};
 
 class Scene {
 public:
@@ -128,8 +132,10 @@ public:
 
     UniformMemory::UBO lightUBO;
 
-protected:
+    WindowStates state;
+
     GLFWwindow* window;
+protected:
 
     const char* title;
     static unsigned int scrWidth;

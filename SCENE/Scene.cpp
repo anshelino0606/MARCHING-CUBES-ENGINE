@@ -1,13 +1,18 @@
 #define GLFW_INCLUDE_GLCOREARB
 #include "Scene.h"
-
+#include "LIBRARIES/imgui/imgui.h"
+#include "LIBRARIES/imgui/backends/imgui_impl_glfw.h"
+#include "LIBRARIES/imgui/backends/imgui_impl_opengl3.h"
 #define MAX_POINT_LIGHTS 10
 #define MAX_SPOT_LIGHTS 2
 
 #define WINDOW_WIDTH 1680
 #define WINDOW_HEIGHT 1020
+
 unsigned int Scene::scrWidth = WINDOW_WIDTH*2;
 unsigned int Scene::scrHeight = WINDOW_HEIGHT*2;
+
+
 
 void Scene::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     int fbWidth, fbHeight;
@@ -22,6 +27,8 @@ void Scene::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     fbHeight *= yscale;
 
     glViewport(0, 0, fbWidth, fbHeight);
+
+
 
     Scene::scrHeight = fbHeight;
     Scene::scrWidth = fbWidth;
@@ -104,6 +111,7 @@ bool Scene::init() {
         return false;
     }
     fonts = avl_createEmptyRoot(strkeycmp);
+    Scene::state = WindowStates::ACTIVE;
 
     return true;
 }
@@ -229,45 +237,58 @@ void Scene::prepare(Box& box, std::vector<Shader> shaders) {
 }
 
 void Scene::processInput(float dt) {
-    if (activeCamera != -1 && activeCamera < cameras.size()) {
-        double dx = Mouse::getDX(), dy = Mouse::getDY();
-        if (dx != 0 || dy != 0) {
-            cameras[activeCamera]->updateCameraDirection(dx, dy);
+    if (state == WindowStates::ACTIVE) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        if (activeCamera != -1 && activeCamera < cameras.size()) {
+            double dx = Mouse::getDX(), dy = Mouse::getDY();
+            if (dx != 0 || dy != 0) {
+                cameras[activeCamera]->updateCameraDirection(dx, dy);
+            }
+
+            double scrollDy = Mouse::getScrollDY();
+            if (scrollDy != 0) {
+                cameras[activeCamera]->updateCameraZoom(scrollDy);
+            }
+
+            if (Keyboard::key(GLFW_KEY_W)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::FORWARD, dt);
+            }
+            if (Keyboard::key(GLFW_KEY_S)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::BACKWARD, dt);
+            }
+            if (Keyboard::key(GLFW_KEY_D)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::RIGHT, dt);
+            }
+            if (Keyboard::key(GLFW_KEY_A)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::LEFT, dt);
+            }
+            if (Keyboard::key(GLFW_KEY_SPACE)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::UP, dt);
+            }
+            if (Keyboard::key(GLFW_KEY_LEFT_SHIFT)) {
+                cameras[activeCamera]->updateCameraPos(CameraDirection::DOWN, dt);
+            }
+
+            view = cameras[activeCamera]->getViewMatrix();
+            projection = glm::perspective(
+                    glm::radians(cameras[activeCamera]->getZoom()),        // FOV
+                    (float) scrWidth / (float) scrHeight,                    // aspect ratio
+                    0.1f, 100.0f                                        // near and far bounds
+            );
+            textProjection = glm::ortho(0.0f, (float) scrWidth, 0.0f, (float) scrHeight);
+
+            cameraPos = cameras[activeCamera]->cameraPos;
         }
 
-        double scrollDy = Mouse::getScrollDY();
-        if (scrollDy != 0) {
-            cameras[activeCamera]->updateCameraZoom(scrollDy);
+        if (Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
+            state = WindowStates::MENU;
         }
-
-        if (Keyboard::key(GLFW_KEY_W)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::FORWARD, dt);
+    }
+    if (state == WindowStates::MENU) {
+        if (Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
+            state = WindowStates::ACTIVE;
         }
-        if (Keyboard::key(GLFW_KEY_S)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::BACKWARD, dt);
-        }
-        if (Keyboard::key(GLFW_KEY_D)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::RIGHT, dt);
-        }
-        if (Keyboard::key(GLFW_KEY_A)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::LEFT, dt);
-        }
-        if (Keyboard::key(GLFW_KEY_SPACE)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::UP, dt);
-        }
-        if (Keyboard::key(GLFW_KEY_LEFT_SHIFT)) {
-            cameras[activeCamera]->updateCameraPos(CameraDirection::DOWN, dt);
-        }
-
-        view = cameras[activeCamera]->getViewMatrix();
-        projection = glm::perspective(
-                glm::radians(cameras[activeCamera]->getZoom()),	    // FOV
-                (float)scrWidth / (float)scrHeight,					// aspect ratio
-                0.1f, 100.0f										// near and far bounds
-        );
-        textProjection = glm::ortho(0.0f, (float)scrWidth, 0.0f, (float)scrHeight);
-
-        cameraPos = cameras[activeCamera]->cameraPos;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
 
@@ -286,6 +307,7 @@ void Scene::newFrame(Box &box) {
 
     glfwSwapBuffers(window);
     glfwPollEvents();
+
 }
 
 void Scene::renderShader(Shader shader, bool applyLighting) {

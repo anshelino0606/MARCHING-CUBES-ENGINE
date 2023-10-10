@@ -50,6 +50,7 @@ public:
           const char* title, unsigned int scrWidth, unsigned int scrHeight);
 
     static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+    static void windowSizeCallback(GLFWwindow* window, int width, int height);
 
     bool init();
     bool registerFont(TextRenderer* tr, std::string name, std::string path);

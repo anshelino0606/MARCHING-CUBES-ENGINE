@@ -5,19 +5,17 @@ This document presents a comprehensive research on 3D reconstruction using the M
 ## Definitions
 
 1. **Voxel**: A voxel is the three-dimensional equivalent of a pixel. It represents a value in a regular grid in 3D space. This is used in computer graphics to represent a 3D object, just like a pixel represents a 2D object in an image [Source 0](https://stackoverflow.com/questions/7854498/triangulating-a-set-of-voxels).
-   ![Voxel](https://en.wikipedia.org/wiki/Voxel#/media/File:Voxelgitter.png)
+   ![Voxel](../Images/voxel.png)
 
 2. **Chunk**: A chunk often refers to a piece or section of a larger 3D environment. This environment could be a game world or any other 3D space. Chunks are used to manage and render only the parts of the world that are currently needed [Source 2](https://transvoxel.org/).
-   ![Chunk](https://minecraft.fandom.com/wiki/File:Chunks.png)
 
 3. **Triangulation**: Triangulation is the process of dividing a geometric surface into triangles. This is done because a triangle is a simple shape that is easy to work with and can be used to approximate more complex shapes [Source 0](https://stackoverflow.com/questions/7854498/triangulating-a-set-of-voxels).
-   ![Triangulation](https://en.wikipedia.org/wiki/Triangulation_(computer_graphics)#/media/File:Triangulation.png)
 
 4. **Isosurface**: An isosurface is a three-dimensional analog of an isoline. It is a surface that represents points of a constant value within a volume of space; in other words, it is a level set of a continuous function whose domain is 3-space [Source 4](https://en.wikipedia.org/wiki/Isosurface).
    ![Isosurface](../Images/isosurface.png)
 
 5. **Marching Cubes**: Marching cubes is a computer graphics algorithm for extracting a polygonal mesh of an isosurface from a three-dimensional discrete scalar field (the elements of which are sometimes called voxels) [Source 1](https://en.wikipedia.org/wiki/Marching_cubes).
-   ![Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes#/media/File:Marching_cubes_algorithm.png)
+   ![Marching Cubes](../Images/marchingcubes.png)
 
 ## Problems and Solutions
 

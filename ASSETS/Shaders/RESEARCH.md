@@ -15,7 +15,7 @@ This document presents a comprehensive research on 3D reconstruction using the M
    ![Isosurface](../Images/isosurface.png)
 
 5. **Marching Cubes**: Marching cubes is a computer graphics algorithm for extracting a polygonal mesh of an isosurface from a three-dimensional discrete scalar field (the elements of which are sometimes called voxels) [Source 1](https://en.wikipedia.org/wiki/Marching_cubes).
-   ![Marching Cubes](../Images/marchingcubes.png)
+   ![Marching Cubes](../Images/marchingcubes.jpeg)
 
 ## Problems and Solutions
 

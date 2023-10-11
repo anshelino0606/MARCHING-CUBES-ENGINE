@@ -14,7 +14,7 @@ This document presents a comprehensive research on 3D reconstruction using the M
    ![Triangulation](https://en.wikipedia.org/wiki/Triangulation_(computer_graphics)#/media/File:Triangulation.png)
 
 4. **Isosurface**: An isosurface is a three-dimensional analog of an isoline. It is a surface that represents points of a constant value within a volume of space; in other words, it is a level set of a continuous function whose domain is 3-space [Source 4](https://en.wikipedia.org/wiki/Isosurface).
-   ![Isosurface](../Images/isosurface.ong)
+   ![Isosurface](../Images/isosurface.png)
 
 5. **Marching Cubes**: Marching cubes is a computer graphics algorithm for extracting a polygonal mesh of an isosurface from a three-dimensional discrete scalar field (the elements of which are sometimes called voxels) [Source 1](https://en.wikipedia.org/wiki/Marching_cubes).
    ![Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes#/media/File:Marching_cubes_algorithm.png)

@@ -9,13 +9,19 @@ This document presents a comprehensive research on 3D reconstruction using the M
 
 2. **Chunk**: A chunk often refers to a piece or section of a larger 3D environment. This environment could be a game world or any other 3D space. Chunks are used to manage and render only the parts of the world that are currently needed [Source 2](https://transvoxel.org/).
 
-3. **Triangulation**: Triangulation is the process of dividing a geometric surface into triangles. This is done because a triangle is a simple shape that is easy to work with and can be used to approximate more complex shapes [Source 0](https://stackoverflow.com/questions/7854498/triangulating-a-set-of-voxels).
+3. **Vector field**: A vector field on R^3 is a function that assigns to each point (x,y,z) a three-dimensional vector F(x,y,z).
 
-4. **Isosurface**: An isosurface is a three-dimensional analog of an isoline. It is a surface that represents points of a constant value within a volume of space; in other words, it is a level set of a continuous function whose domain is 3-space [Source 4](https://en.wikipedia.org/wiki/Isosurface).
+4. **Scalar field**: a function associating a single number to every point in a space – possibly physical space. 
+
+5. **Triangulation**: Triangulation is the process of dividing a geometric surface into triangles. This is done because a triangle is a simple shape that is easy to work with and can be used to approximate more complex shapes [Source 0](https://stackoverflow.com/questions/7854498/triangulating-a-set-of-voxels).
+
+6. **Isosurface**: An isosurface is a three-dimensional analog of an isoline. It is a surface that represents points of a constant value within a volume of space; in other words, it is a level set of a continuous function whose domain is 3-space [Source 4](https://en.wikipedia.org/wiki/Isosurface).
    ![Isosurface](../Images/isosurface.png)
 
-5. **Marching Cubes**: Marching cubes is a computer graphics algorithm for extracting a polygonal mesh of an isosurface from a three-dimensional discrete scalar field (the elements of which are sometimes called voxels) [Source 1](https://en.wikipedia.org/wiki/Marching_cubes).
+7. **Marching Cubes**: Marching cubes is a computer graphics algorithm for extracting a polygonal mesh of an isosurface from a three-dimensional discrete scalar field (the elements of which are sometimes called voxels) [Source 1](https://en.wikipedia.org/wiki/Marching_cubes).
    ![Marching Cubes](../Images/marchingcubes.jpeg)
+
+
 
 ## Problems and Solutions
 

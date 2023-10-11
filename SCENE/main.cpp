@@ -194,11 +194,15 @@ int main() {
         // calculate dt
         double currentTime = glfwGetTime();
         dt = currentTime - lastFrame;
+        float fps = 1.0f / dt;
         lastFrame = currentTime;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::ShowDemoWindow();
+        ImGui::Begin("FPS counter");
+        ImGui::Text("FPS: %.0f", fps);
+        ImGui::End();
 
 //        scene.variableLog["time"] += dt;
         scene.variableLog["fps"] = 1 / dt;
@@ -223,7 +227,7 @@ int main() {
         renderScene(dirShadowShader);
 
         //// render scene to point light FBOs
-//        for (unsigned int i = 0, len = scene.pointLights.size(); i < len; i++) {
+//        for (unsigned int i = /0, len = scene.pointLights.size(); i < len; i++) {
 //            if (States::indexActive(&scene.activePointLights, i)) {
 //                scene.pointLights[i]->shadowFBO.activate();
 //                scene.renderPointLightShader(pointShadowShader, i);
@@ -232,13 +236,13 @@ int main() {
 //        }
 
         //// render scene to spot light FBOs
-//        for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
-//            if (States::indexActive(&scene.activeSpotLights, i)) {
-//                scene.spotLights[i]->shadowFBO.activate();
-//                scene.renderSpotLightShader(spotShadowShader, i);
-//                renderScene(spotShadowShader);
-//            }
-//        }
+        for (unsigned int i = 0, len = scene.spotLights.size(); i < len; i++) {
+            if (States::indexActive(&scene.activeSpotLights, i)) {
+                scene.spotLights[i]->shadowFBO.activate();
+                scene.renderSpotLightShader(spotShadowShader, i);
+                renderScene(spotShadowShader);
+            }
+        }
 
         // render scene normally
         scene.defaultFBO.activate();
@@ -246,8 +250,8 @@ int main() {
         renderScene(shader);
 
         // render boxes
-//        scene.renderShader(boxShader, false);
-//        box.render(boxShader);
+        scene.renderShader(boxShader, false);
+        box.render(boxShader);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -286,7 +290,7 @@ void launchItem(float dt) {
     RigidBody* rb = scene.generateInstance(sphere.id, glm::vec3(0.3f), 3.0f, cam.cameraPos);
     if (rb) {
         // instance generated successfully
-        rb->transferEnergy(5.0f, cam.cameraFront);
+        rb->transferEnergy(30.0f, cam.cameraFront);
         rb->applyAcceleration(Environment::gravitationalAcceleration);
     }
 }
